@@ -1,0 +1,64 @@
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+    <!-- Links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">  <a href="orderlist" class="nav-link" routerLinkActive="active">Order List</a></li>
+        <li class="nav-item"> <a href="placeorder" class="nav-link" routerLinkActive="active">Place Order</a></li>
+        <li class="nav-item">
+            <button class="btn btn-success navbar-btn" (click)=logout() type="submit">Logout</button>
+        </li>
+    </ul>
+</nav>
+<br>
+<!--nav class="navbar navbar-expand-sm bg-primary navbar-light bg-light">
+        <ul class="navbar-nav"> 
+                <li class="nav-item">
+                        <a href="list" class="nav-link" routerLinkActive="active"> List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="add" class="nav-link" routerLinkActive="active">Add Asset</a>
+                    </li>
+                   
+        </ul>
+</nav-->
+
+<table class="table table-hover table-dark">
+    <thead class="">
+        <th>Purchase ID</th>
+        <th> Order No </th>
+        <th>Asset Name </th>
+        <th>Asset Type</th>
+        <th>Quantity</th>
+        <th>Vendor Name</th>
+        <th>Purchased Date</th>
+        <th>Delivery Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let pd of purchases| async | paginate:{itemsPerPage:3,currentPage:p};let i=index">
+            <td>{{pd.purchaseId}}</td>
+            <td>{{pd.purchaseOrderNo}}</td>
+            <td>{{pd.assetName}}</td>
+            <td>{{pd.assetType}}</td>
+            <td>{{pd.quantity}}</td>
+            <td>{{pd.vendorName}}</td>
+            <td>{{pd.purchaseDateStr}}</td>
+            <td>{{pd.purchaseDelivDateStr}}</td>
+            <td>{{pd.purchaseStatus}}</td>
+            <button [routerLink]="['/editorder',pd.purchaseId]" style="margin-left: 20px" class="btn btn-info" [disabled]="pd.purchaseStatus=='Asset Registered Internally'">Edit</button>
+            <button class="btn btn-danger" style="margin-left: 20px" mwlConfirmationPopover
+                [popoverTitle]="popoverTitle" [popoverMessage]="popoverMessage" placement="left"
+                (confirm)="confirmClicked = true" (cancel)="cancelClicked = true" confirmButtonType="warning"
+                cancelButtonType="default" (click)="confirmClicked=false;
+            cancelClicked=false" [appendToBody]="true" (confirm)=deleteorder(pd.purchaseId) [disabled]="pd.purchaseStatus=='Asset Registered Internally'">Cancel</button>
+        </tr>
+
+    </tbody>
+
+</table>
+
+
+
+<div style="text-align:center">
+    <pagination-controls (pageChange)="p=$event"></pagination-controls>
+</div>
